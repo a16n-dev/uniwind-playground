@@ -1,72 +1,42 @@
-import {Text, View} from "react-native";
-
-function CustomNestedText({children}: { children: string }) {
-    return (
-        <Text>
-            <Text>{children}</Text>
-        </Text>
-    );
-}
-
-function CustomText({children}: { children: string }) {
-    return (
-        <Text>{children}</Text>
-    );
-}
+import {FlashList} from "@shopify/flash-list";
+import {useEffect, useState} from "react";
+import {Pressable, Text, View} from "react-native";
 
 export default function App() {
+    const [showBasicList, setShowBasicList] = useState(false);
+    const [showClassNameList, setShowClassNameList] = useState(false);
+
+    useEffect(() => {
+        if(showBasicList){
+            setShowBasicList(false)
+        }
+        if(showClassNameList) {
+        setShowClassNameList(false)
+        }
+    }, [showBasicList, showClassNameList]);
+
     return (
-        <View className="flex-1 items-center justify-center gap-8">
-            {/* ❌ custom nested text + custom text breaks */}
-            <Text>
-                <CustomNestedText>{'Hello '}</CustomNestedText>
-                <CustomText>{'world '}</CustomText>
-            </Text>
-            {/* ✅ Inline nested text works fine */}
-            <Text>
-                <Text>{'Hello '}</Text>
-                <Text>
-                    <Text>
-                        {'world '}
-                    </Text>
+        <View className={'flex-1 py-16'}>
+            <Pressable
+                className={'m-4 px-4 py-4 rounded-sm bg-slate-800'}
+                onPress={() => {
+                    setShowBasicList(true);
+                }}>
+                <Text className={'text-white'}>
+                    Show FlashList without classname (fine)
                 </Text>
-            </Text>
-            {/* ✅ Custom nested text + Custom nested text works fine */}
-            <Text>
-                <CustomNestedText>{'Hello '}</CustomNestedText>
-                <CustomNestedText>{'world '}</CustomNestedText>
-            </Text>
-            {/* ✅ Single nested + Works fine */}
-            <Text>
-                <CustomText>{'Hello '}</CustomText>
-                <CustomText>{'world '}</CustomText>
-            </Text>
-            {/* ❌ String + custom text breaks */}
-            <Text>
-                {'Hello '}
-                <CustomText>{'world '}</CustomText>
-            </Text>
-            {/* ✅ String + custom nested text works fine */}
-            <Text>
-                {'Hello '}
-                <CustomNestedText>{'world '}</CustomNestedText>
-            </Text>
-            {/* ✅ String + inline nested text works */}
-            <Text>
-                {'Hello '}
-                <Text>
-                    <Text>
-                        {'world '}
-                    </Text>
+            </Pressable>
+            <Pressable
+                className={'m-4 px-4 py-4 rounded-sm bg-slate-800'}
+                onPress={() => {
+                    setShowClassNameList(true);
+                }}>
+                <Text className={'text-white'}>
+                    Show FlashList with classname (crashes)
                 </Text>
-            </Text>
-            {/* ✅ String + inline text works */}
-            <Text>
-                {'Hello '}
-                <Text>
-                    {'world '}
-                </Text>
-            </Text>
+            </Pressable>
+            {showBasicList && <FlashList renderItem={() => null} data={[]}/>}
+            {showClassNameList && <FlashList renderItem={() => null} data={[]} contentContainerClassName={''}/>}
         </View>
     );
 }
