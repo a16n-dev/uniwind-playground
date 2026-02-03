@@ -1,6 +1,6 @@
 import {FlashList} from "@shopify/flash-list";
 import {useEffect, useState} from "react";
-import {Pressable, Text, View} from "react-native";
+import {Pressable, Text, View, FlatList} from "react-native";
 
 export default function App() {
     const [showBasicList, setShowBasicList] = useState(false);
@@ -11,7 +11,7 @@ export default function App() {
             setShowBasicList(false)
         }
         if(showClassNameList) {
-        setShowClassNameList(false)
+            setShowClassNameList(false)
         }
     }, [showBasicList, showClassNameList]);
 
@@ -35,7 +35,7 @@ export default function App() {
                     Show FlashList with classname (crashes)
                 </Text>
             </Pressable>
-            {showBasicList && <FlashList renderItem={() => null} data={[]}/>}
+            {showBasicList && <FlashList renderItem={() => null} data={[]} />}
             {showClassNameList && <FlashList renderItem={() => null} data={[]} contentContainerClassName={''}/>}
         </View>
     );
